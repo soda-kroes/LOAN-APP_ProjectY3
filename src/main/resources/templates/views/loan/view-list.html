@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="/layout/_default"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Loan-List</title>
+    <div layout:fragment="style">
+        <link rel="stylesheet" th:href="@{/assets/web/share/index.css}"/>
+        <link href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+    </div>
+    <style>
+        /* Dropdown menu */
+        .dropdown-menu {
+            min-width: 100px;
+            border: none;
+            box-shadow: none;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+
+        }
+        .dropdown-toggle::after {
+            content: none;
+        }
+
+        .dropdown-item i {
+            margin-right: 5px;
+        }
+        /* Dropdown item on hover */
+        .dropdown-item:hover {
+            background-color: #1f8dff;
+            color: white;
+        }
+        /* Dropdown toggle button */
+        .dropdown-toggle {
+            border-radius: 4px;
+            padding: 6px 12px;
+        }
+    </style>
+
+</head>
+<body>
+<div layout:fragment="content">
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Loan Management</a></li>
+                        <li class="breadcrumb-item active">View Loan</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">Loan List</h4>
+            </div>
+        </div>
+    </div>
+    <!-- end page title -->
+
+    <div class="row">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <table id="idMemberView" class="table table-sm table-hover" style="width:100%;">
+                                <thead class="text-center" style="background-color: #e8f6fe">
+                                <tr style="color: black">
+                                    <th>No</th>
+                                    <th>FIRSTNAME</th>
+                                    <th>LASTNAME</th>
+                                    <th>GENDER</th>
+                                    <th>MARITAL STATUS</th>
+                                    <th>DATE OF BIRTH</th>
+                                    <th>LEGAL ID</th>
+                                    <th>ADDRESS</th>
+                                    <th>ACTION</th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<div layout:fragment="script">
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
+<!--    <script th:src="@{/web/js/view-loan.js}"></script>-->
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            getData();
+        });
+
+        $('#idMemberView').DataTable({
+            data: Loans,
+            columns: [
+                {
+                    render: function (data, type, full, meta) {
+                        return meta.row + 1;
+                    }
+                },
+                {data: "firstName"},
+                {data: "lastName"},
+                {data: "gender"},
+                {data: "maritalStatus"},
+                {data: "dateOfBirth"},
+                {data: "nationalityId"},
+                {data: "address"},
+                {
+                    render: function (data, type, full, meta) {
+                        return '<div class="dropdown dropstart">' +
+                            '<button class="btn btn-sm dropdown-toggle" style="font-size:12px; margin: 0px; padding:0px; border: none;" type="button" id="dropdownMenuButton_' + '" data-bs-toggle="dropdown" aria-expanded="false">' +
+                            '<i class="fas fa-list-ul"></i>' +
+                            '</button>' +
+                            '<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton_' + full.id + '">' +
+                            '<li><button class="dropdown-item" style="font-size:12px;" onclick="edit(' + full.id + ')"><i class="far fa-edit"></i> Edit</button></li>' +
+                            '<li><button class="dropdown-item" style="font-size:12px;" onclick="remove(' + full.id + ')"><i class="fas fa-trash"></i> Remove</button></li>' +
+                            '<li><button class="dropdown-item" style="font-size:12px;" onclick="details(' + full.id + ')"><i class="fa-solid fa-circle-info"></i> Details</button></li>' +
+                            '</ul>' +
+                            '</div>';
+                    },
+                }
+                // {
+                //     render: function (data, type, full, meta) {
+                //         return '<button class="btn btn-sm btn-danger" style="margin-right: 3px; color:white; font-size:8px;" onclick="remove(' + full.id + ')"><i class="fas fa-trash" style="color: white;"></i> Delete</button>' +
+                //                '<button class="btn btn-sm btn-primary" style="font-size:8px; margin-right: 3px;" onclick="edit(' + full.id + ')"><i class="fa-regular fa-pen-to-square"></i> Edit</button>' +
+                //                '<button class="btn btn-sm btn-info" style="font-size:8px;" onclick="details(' + full.id + ')"><i class="fa-regular fa-pen-to-square"></i> Details</button>';
+                //     }
+                // }
+            ]
+        });
+
+        var table = $('#idMemberView').DataTable();
+        var Loans = [];
+
+        function getData() {
+            // showLoading();
+            $.ajax({
+                type: "GET",
+                url: "api/v1/loan/getLoan",
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (response) {
+                    if (response.status.errorCode === 200) {
+                        // alert('ok');
+                        console.log(response);
+                        // hideLoading();
+                        Loans = [];
+                        Loans = response.data;
+
+                        table.clear();
+                        table.rows.add(Loans);
+                        table.draw();
+                    } else {
+
+                    }
+                }
+            });
+        }
+
+        function remove(loanId) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    showLoading();
+                    $.ajax({
+                        type: "DELETE", // Use the appropriate HTTP method for deletion
+                        url: `api/v1/loan/delete/${loanId}`, // Use template literals for string interpolation
+                        contentType: 'application/json',
+                        dataType: 'json',
+                        success: function (response) {
+                            if (response.status.errorCode === 200) {
+                                setTimeout(function () {
+                                    hideLoading();
+                                    getData();
+                                    Swal.fire({
+                                        title: "Deleted!",
+                                        text: "Your record has been deleted.",
+                                        icon: "success"
+                                    });
+                                }, 2000); // Delay modal
+                            } else {
+                                setTimeout(function () {
+                                    hideLoading();
+                                    Swal.fire({
+                                        title: "Bad Request!",
+                                        text: "An error occurred while deleting the file.",
+                                        icon: "error" // Use 'error' icon for error message
+                                    });
+                                }, 2000); // Delay modal
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            // Handle any errors that occur during the request
+                            console.error(xhr.responseText);
+                            setTimeout(function () {
+                                hideLoading();
+                                Swal.fire({
+                                    title: "Error!",
+                                    text: "An error occurred while deleting the file.",
+                                    icon: "error"
+                                });
+                            }, 2000); // Delay modal
+                        }
+                    });
+                }
+            });
+        }
+
+        function edit(loanId){
+            window.location.href = `/edit?loanId=${loanId}`;
+        }
+        function details(loanId){
+            window.location.href = `/detail?loanId=${loanId}`;
+        }
+
+
+
+        //------------------------------------- For Loading -------------------------------
+        function showLoading() {
+            var loadingIndicatorOverlay = document.createElement('div');
+            loadingIndicatorOverlay.classList.add('loading-indicator-overlay');
+
+            var loadingIndicator = document.createElement('div');
+            loadingIndicator.classList.add('loading-indicator');
+
+            var loadingText = document.createElement('div');
+            loadingText.classList.add('loading-text');
+            loadingText.textContent = 'Please wait...';
+
+            loadingIndicatorOverlay.appendChild(loadingIndicator);
+            loadingIndicatorOverlay.appendChild(loadingText);
+            document.body.appendChild(loadingIndicatorOverlay);
+
+            return true;
+        }
+
+        function hideLoading() {
+            var loadingIndicator = document.querySelector('.loading-indicator-overlay');
+            if (loadingIndicator) {
+                loadingIndicator.remove();
+            }
+        }
+    </script>
+</div>
+</body>
+</html>

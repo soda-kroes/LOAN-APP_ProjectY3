@@ -1,0 +1,207 @@
+
+.loading-indicator-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    color: white;
+    font-size: 20px;
+}
+
+.loading-indicator {
+    border: 14px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 14px solid #3498db;
+    border-bottom: 14px solid #3498db;
+    width: 60px;
+    height: 60px;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.loading-text {
+    margin-top: 10px;
+    text-align: center;
+    color: white;
+    font-size: 16px;
+}
+
+.scroll-to-top {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    color: #fff;
+    z-index: 9999;
+    border-radius: 50%;
+    opacity: 0.7;
+}
+
+.scroll-to-top:hover {
+    opacity: 1;
+}
+.txtTitle1{
+    font-family: 'Viga';
+    font-size: 35px;
+
+}
+.txtTitle2{
+    font-family: 'Viga';
+    font-size: 25px;
+
+}
+.table-responsive {
+    white-space: nowrap;
+    overflow-x: auto;
+}
+
+table.table-sm th {
+    font-size: 11px;
+}
+
+table.table-sm td {
+    font-size: 12px;
+    text-align: center;
+}
+
+
+/* The switch - the box around the slider */
+.switch {
+    font-size: 8px;
+    position: relative;
+    display: inline-block;
+    width: 4.5em;
+    height: 2em;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* The slider */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ff3636;
+    transition: 0.1s;
+    transition-delay: 0.2s;
+    border-radius: 30px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 1.4em;
+    width: 1.4em;
+    border-radius: 20px;
+    left: 0.3em;
+    bottom: 0.3em;
+    background-color: white;
+    transition-delay: 0.2s;
+    transition: 0.1s;
+}
+
+.switch input:checked + .slider {
+    transition-delay: 0.2s;
+    background-color: #00c763;
+}
+
+.switch input:focus + .slider {
+    transition-delay: 0.2s;
+    box-shadow: 0 0 1px #00c763;
+}
+
+.switch input:checked + .slider:before {
+    transform: translateX(2.5em);
+    transition-delay: 0.2s;
+    transition-duration: 0.1s;
+}
+
+/* Animation Right */
+@keyframes slideRight {
+    0% {
+        transform: translateX(0) translateY(0);
+    }
+    20% {
+        transform: translateX(0.5em) translateY(-1.5em);
+    }
+    40% {
+        transform: translateX(1em) translateY(-1.75em); /* Highest Point */
+    }
+    60% {
+        transform: translateX(1.5em) translateY(-1.5em);
+    }
+    80% {
+        transform: translateX(2em) translateY(-1.25em);
+    }
+    100% {
+        transform: translateX(2.5em) translateY(0);
+    }
+}
+
+/* Slide Animation Left */
+@keyframes slideLeft {
+    0% {
+        transform: translateX(2.5em) translateY(0);
+    }
+    20% {
+        transform: translateX(2em) translateY(-0.25em);
+    }
+    40% {
+        transform: translateX(1.5em) translateY(-0.5em); /* Highest Point */
+    }
+    60% {
+        transform: translateX(1em) translateY(-0.75em);
+    }
+    80% {
+        transform: translateX(0.5em) translateY(-0.5em);
+    }
+    100% {
+        transform: translateX(0) translateY(0);
+    }
+}
+
+.switch input:checked + .slider:before {
+    animation: slideRight 0.15s forwards;
+}
+
+.switch input:not(:checked) + .slider:before {
+    animation: slideLeft 0.15s forwards;
+}

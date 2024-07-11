@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="/layout/_default"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>User</title>
+    <div layout:fragment="style">
+        <link rel="stylesheet" th:href="@{/assets/web/share/index.css}"/>
+        <link href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+    </div>
+
+</head>
+<body>
+<div layout:fragment="content">
+    <!-- START MODAL CREATE -->
+    <div class="modal fade" id="idFormUser" tabindex="-1" role="dialog" data-bs-backdrop="static" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title">
+                        <img th:src="@{/assets/images/user-profile.png}" style="width:30px; height:30px;" /><span style="font-size: 18px;">  Create User</span>
+                    </h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form class="need-novalidate-new" novalidate>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div>
+                                    First Name
+                                    <input id="txtFirstName" type="text" class="form-control" required />
+                                    <div class="invalid-feedback">The firstname field is required</div>
+                                </div>
+                                <div style="margin-top:10px;">
+                                    Last Name
+                                    <input id="txtLastName" type="text" class="form-control" required />
+                                    <div class="invalid-feedback">The lastname field is required</div>
+                                </div>
+                                <div style="margin-top:10px;">
+                                    Gender
+                                    <select class="form-select" id="ddlGender">
+                                        <option value="" disabled selected>--- Choose One ---</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                    </select>
+                                    <div class="invalid-feedback">The lastname field is required</div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div>
+                                    Email
+                                    <input id="txtEmail" type="text" class="form-control" required />
+                                    <div class="invalid-feedback">The lastname field is required</div>
+                                </div>
+                                <div style="margin-top:10px;">
+                                    Password
+                                    <input id="txtPassword" type="text" class="form-control" value="123Bank!"
+                                           readonly />
+                                    <div class="invalid-feedback">The password field is required</div>
+                                </div>
+                                <div style="margin-top:10px;">
+                                    Role
+                                    <select class="form-select" id="ddlRole" required>
+                                    </select>
+                                    <div class="invalid-feedback">The branch field is required</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" id="btnSaveUser" class="btn btn-primary">Save</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+<!--END MODAL CREATE-->
+
+    <!-- START MODAL EDIT -->
+    <div class="modal fade" id="idFormUserEdit" tabindex="-1" role="dialog" data-bs-backdrop="static" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title">
+                        <img th:src="@{/assets/images/user-profile.png}" style="width:30px; height:30px;" /><span style="font-size: 18px;">  Edit User</span>
+                    </h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form class="need-novalidate-new-edit" novalidate>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div>
+                                    First Name
+                                    <input id="txtFirstNameEdit" type="text" class="form-control" required />
+                                    <div class="invalid-feedback">The firstname field is required</div>
+                                </div>
+                                <div style="margin-top:10px;">
+                                    Last Name
+                                    <input id="txtLastNameEdit" type="text" class="form-control" required />
+                                    <div class="invalid-feedback">The lastname field is required</div>
+                                </div>
+                                <div style="margin-top:10px;">
+                                    Gender
+                                    <select class="form-select" id="ddlGenderEdit">
+                                        <option value="" disabled selected>--- Choose One ---</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                    </select>
+                                    <div class="invalid-feedback">The lastname field is required</div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div>
+                                    Email
+                                    <input id="txtEmailEdit" type="text" class="form-control" required />
+                                    <div class="invalid-feedback">The lastname field is required</div>
+                                </div>
+                                <div style="margin-top:10px;">
+                                    Password
+                                    <input id="txtPasswordEdit" type="text" class="form-control" value="######"
+                                           readonly />
+                                    <div class="invalid-feedback">The password field is required</div>
+                                </div>
+                                <div style="margin-top:10px;">
+                                    Role
+                                    <select class="form-select" id="ddlRoleEdit" required>
+                                    </select>
+                                    <div class="invalid-feedback">The branch field is required</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" id="btnSaveUserEdit" class="btn btn-primary">Save Update</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--END MODAL CREATE-->
+
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">User Management</a></li>
+                        <li class="breadcrumb-item active">View User</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">Loan List</h4>
+            </div>
+        </div>
+    </div>
+    <!-- end page title -->
+
+    <div class="row">
+        <div class="card">
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-sm-4">
+                        <button class="d-sm-inline-block btn btn-sm btn-primary shadow-sm text-light" id="btnNewUser"
+                                data-bs-target="#idFormUser" data-bs-toggle="modal">
+                            <i class="fas fa-user-plus fa-sm text-white-50"></i> New User
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <table id="idMemberView" class="table table-sm table-hover" style="width:100%;">
+                                <thead class="text-center" style="background-color: #e8f6fe">
+                                <tr style="color: black">
+                                    <th>No</th>
+                                    <th>FIRSTNAME</th>
+                                    <th>LASTNAME</th>
+                                    <th>GENDER</th>
+                                    <th>EMAIl</th>
+                                    <th>ROLE</th>
+                                    <th>CREATED DATE</th>
+                                    <th>STATUS</th>
+                                    <th>ACTION</th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div layout:fragment="script">
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
+    <script th:inline="javascript">
+    <!--FORM LOAD-->
+        $(document).ready(function () {
+            getData();
+        });
+    function remove(userId){
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                showLoading();
+                $.ajax({
+                    type: "DELETE",
+                    url: `api/v1/user/delete/${userId}`,
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    processData: false,
+                    success: function (response) {
+                        // console.log(response);
+                        if (response.errorCode === 200) {
+                            setTimeout(function () {
+                                hideLoading();
+                                Swal.fire({
+                                    title: "Deleted!",
+                                    text: "User has been deleted.",
+                                    icon: "success"
+                                });
+                                // Reset the form
+                                getData();
+                            }, 2000); // Delay modal
+                        } else {
+                            hideLoading();
+                            Swal.fire({
+                                title: "Error",
+                                text: "An error occurred while processing your request.",
+                                icon: "error"
+                            });
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        hideLoading();
+                        Swal.fire({
+                            title: "Error",
+                            text: "An error occurred while processing your request.",
+                            icon: "error"
+                        });
+                    }
+                });
+            }
+        });
+    }
+
+        $('#idMemberView').DataTable({
+            data: Loans,
+            columns: [
+                {
+                    render: function (data, type, full, meta) {
+                        return meta.row + 1;
+                    }
+                },
+                {data: "firstname"},
+                {data: "lastname"},
+                {data: "gender"},
+                {data: "email"},
+                {
+                    data: "userRoles",
+                    render: function (data, type, full, meta) {
+                        return data[0].name;
+                    }
+                },
+                {
+                    data: "createdDate",
+                    render: function(data, type, full, meta) {
+                        var date = new Date(data);
+                        return date.toLocaleDateString();
+                    }
+                },
+
+                {
+                    data: "id",
+                    render: function (data, type, full, meta) {
+                        var checked = full.status === 1 ? 'checked' : '';
+                        return '<label class="switch">' +
+                            '<input type="checkbox" class="toggle-switch" data-id="' + data + '" ' + checked + ' />' +
+                            '<span class="slider"></span>' +
+                            '</label>';
+                    }
+                },
+                {
+                    render: function (data, type, full, meta) {
+                        return '<button class="btn btn-sm btn-danger" style="margin-right: 3px; color:white; font-size:8px;" onclick="remove(' + full.id + ')"><i class="fas fa-trash" style="color: white;"></i> Delete</button>' +
+                            '<button class="btn btn-sm btn-primary" style="margin-right: 3px; font-size:8px;" onclick="edit(' + full.id + ')"><i class="fa-regular fa-pen-to-square"></i> Edit</button>' +
+                            '<button class="btn btn-sm btn-success" style="font-size:8px; color: white;"  onclick="reset(' + full.id + ')"><i class="fa-solid fa-rotate-left"></i> Reset</button>';
+                    }
+                }
+            ],
+            drawCallback: function(settings) {
+                $('.toggle-switch').off('change').on('change', function() {
+                    var id = $(this).data('id');
+                    var isChecked = $(this).is(':checked');
+
+                    if (isChecked) {
+                        // alert("Checked, ID: " + id);
+                        $.ajax({
+                            type: "GET",
+                            url: "api/v1/user/enable/" + id,
+                            contentType: 'application/json',
+                            dataType: 'json',
+                            success: function (response) {
+                            }
+                        });
+                    } else {
+                        // alert("Unchecked, ID: " + id);
+                        $.ajax({
+                            type: "GET",
+                            url: "api/v1/user/disable/" + id,
+                            contentType: 'application/json',
+                            dataType: 'json',
+                            success: function (response) {
+                            }
+                        });
+                    }
+                });
+            }
+        });
+
+
+        var table = $('#idMemberView').DataTable();
+        var Loans = [];
+        function getData() {
+            // showLoading();
+            $.ajax({
+                type: "GET",
+                url: "api/v1/user/getUser",
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (response) {
+                    if (response.status.errorCode == 200) {
+                        // alert('ok');
+                         console.log(response);
+                        // hideLoading();
+                        Loans = [];
+                        Loans = response.data;
+
+                        table.clear();
+                        table.rows.add(Loans);
+                        table.draw();
+                    } else {
+
+                    }
+                }
+            });
+        }
+
+
+
+    var valueUserId ;
+    function edit(userId) {
+        valueUserId = userId;
+        $('#idFormUserEdit').modal('show');
+        $.ajax({
+            url: `api/v1/user/getUserById/${valueUserId}`,
+            type: 'GET',
+            dataType: 'JSON',
+            data: { userId: valueUserId },
+            success: function (response) {
+                console.log(response);
+                if (response.status.errorCode == 200) {
+                    $('#txtFirstNameEdit').val(response.data.firstname);
+                    $('#txtLastNameEdit').val(response.data.lastname);
+                    $('#ddlGenderEdit').val(response.data.gender);
+                    $('#txtEmailEdit').val(response.data.email);
+
+                    var role = response.data.userRoles[0].id;
+                    getRoleEdit(role);
+
+                } else {
+                    // Handle error if necessary
+                }
+            },
+            error: function (xhr, status, error) {
+                // Handle error if necessary
+            }
+        });
+    }
+
+    $('#txtFirstNameEdit,#txtLastNameEdit,#txtFirstName,#txtLastName').on('keyup', function () {
+        $(this).val($(this).val().toUpperCase())
+    })
+
+    var form = document.getElementsByClassName('need-novalidate-new-edit');
+    var validation = Array.prototype.filter.call(form, function(forms) {
+        forms.addEventListener('submit', function(event) {
+            if (forms.checkValidity() === false) {
+                event.preventDefault();
+            } else {
+                event.preventDefault();
+                // Check which button triggered the form submission
+                var submitButtonId = event.submitter.id;
+                if (submitButtonId === 'btnSaveUserEdit') {
+                    // alert('you click update.');
+                    var firstName = $('#txtFirstNameEdit').val();
+                    var lastName = $('#txtLastNameEdit').val();
+                    var gender = $('#ddlGenderEdit').val();
+                    var email = $('#txtEmailEdit').val();
+                    var roleId = selectedRoleValue;
+                    // alert(roleId);
+
+                    var json = {
+                        firstname: firstName,
+                        lastname: lastName,
+                        gender: gender,
+                        email: email,
+                        user_role_id: roleId
+                    }
+                     console.log(JSON.stringify(json));
+                    showLoading();
+                    $.ajax({
+                        type: "POST",
+                        url: `api/v1/user/edit/${valueUserId}`,
+                        contentType: 'application/json',
+                        dataType: 'json',
+                        data: JSON.stringify(json),
+                        processData: false,
+                        success: function (response) {
+                            // console.log(response);
+                            if (response.errorCode ==200) {
+                                setTimeout(function () {
+                                    hideLoading();
+                                    $('#idFormUserEdit').modal('hide');
+                                    Swal.fire({
+                                        title: "Congratulations!",
+                                        text: "User has been successfully updated.",
+                                        icon: "success"
+                                    });
+                                    getData();
+                                    // Reset the form
+                                    forms.reset();
+                                    forms.classList.remove('was-validated');
+                                }, 2000); // Delay modal
+                            } else {
+                                hideLoading();
+                                Swal.fire({
+                                    title: "Error",
+                                    text: "An error occurred while processing your request.",
+                                    icon: "error"
+                                });
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            hideLoading();
+                            Swal.fire({
+                                title: "Error",
+                                text: "An error occurred while processing your request.",
+                                icon: "error"
+                            });
+                        }
+                    });
+                }
+            }
+            forms.classList.add('was-validated');
+        }, false);
+    });
+
+
+    function reset(userId){
+        $.ajax({
+            url: `api/v1/user/resetPassword`,
+            type: 'POST',
+            dataType: 'JSON',
+            data: { userId: userId },
+            success: function (response) {
+                console.log(response);
+                if (response.errorCode == 200) {
+                    Swal.fire({
+                        title: "Congratulations!",
+                        text: "User has been successfully reset.",
+                        icon: "success"
+                    });
+                } else {
+                    // Handle error if necessary
+                }
+            },
+            error: function (xhr, status, error) {
+                // Handle error if necessary
+            }
+        });
+    }
+
+    var selectedRoleValue; // Global variable to store the selected value
+
+    function getRoleEdit(role) {
+        $.ajax({
+            type: "GET",
+            url: "api/v1/master-data/getRole",
+            contentType: 'application/json',
+            dataType: 'json',
+            success: function (response) {
+                if (response.data.length > 0) {
+                    var ddlRoleEdit = $('#ddlRoleEdit');
+                    ddlRoleEdit.empty();
+
+                    var defaultOption = new Option('--- Choose Address ---', '');
+                    defaultOption.disabled = true;
+                    defaultOption.selected = true;
+                    ddlRoleEdit.append(defaultOption);
+
+                    for (var i = 0; i < response.data.length; i++) {
+                        var data = response.data[i];
+                        var value = data.id;
+                        var text = data.name;
+                        var option = new Option(text, value);
+                        ddlRoleEdit.append(option);
+                    }
+                    ddlRoleEdit.val(role);
+
+                    ddlRoleEdit.on('change', function() {
+                        selectedRoleValue = $(this).val(); // Store the selected value in the global variable
+                        // alert(selectedRoleValue);
+                    });
+                }
+            }
+        });
+    }
+
+        function getRole() {
+            $.ajax({
+                type: "GET",
+                url: "api/v1/master-data/getRole",
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (response) {
+                    // console.log(response);
+                    if (response.data.length > 0) {
+                        var ddlRole = $('#ddlRole');
+                        ddlRole.empty();
+
+                        var defaultOption = new Option('--- Choose Address ---', '');
+                        defaultOption.disabled = true; // Disable the option
+                        defaultOption.selected = true; // Select the option
+                        ddlRole.append(defaultOption);
+
+                        for (var i = 0; i < response.data.length; i++) {
+                            var data = response.data[i];
+                            var value = data.id;
+                            var text = data.name;
+                            var option = new Option(text, value);
+                            ddlRole.append(option); // Append the option to the select element
+                        }
+
+                    }
+                }
+            });
+        }
+        getRole();
+
+
+
+
+        var form = document.getElementsByClassName('need-novalidate-new');
+        var validation = Array.prototype.filter.call(form, function(forms) {
+            forms.addEventListener('submit', function(event) {
+                if (forms.checkValidity() === false) {
+                    event.preventDefault();
+                } else {
+                    event.preventDefault();
+                    // Check which button triggered the form submission
+                    var submitButtonId = event.submitter.id;
+                    if (submitButtonId === 'btnSaveUser') {
+                        var firstName = $('#txtFirstName').val();
+                        var lastName = $('#txtLastName').val();
+                        var gender = $('#ddlGender').val();
+                        var email = $('#txtEmail').val();
+                        var password = $('#txtPassword').val();
+                        var roleId = $('#ddlRole').val();
+
+                        var json = {
+                            firstname: firstName,
+                            lastname: lastName,
+                            gender: gender,
+                            email: email,
+                            password: password,
+                            user_role_id: roleId
+                        }
+                        // console.log(JSON.stringify(json));
+                        showLoading();
+                        $.ajax({
+                            type: "POST",
+                            url: "api/v1/user/register",
+                            contentType: 'application/json',
+                            dataType: 'json',
+                            data: JSON.stringify(json),
+                            processData: false,
+                            success: function (response) {
+                                // console.log(response);
+                                if (response.errorCode ==200) {
+                                    setTimeout(function () {
+                                        hideLoading();
+                                        $('#idFormUser').modal('hide');
+                                        Swal.fire({
+                                            title: "Congratulations!",
+                                            text: "User has been successfully created.",
+                                            icon: "success"
+                                        });
+                                        getData();
+
+                                        // Reset the form
+                                        forms.reset();
+                                        forms.classList.remove('was-validated');
+                                    }, 2000); // Delay modal
+                                } else {
+                                    hideLoading();
+                                    Swal.fire({
+                                        title: "Error",
+                                        text: "An error occurred while processing your request.",
+                                        icon: "error"
+                                    });
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                hideLoading();
+                                Swal.fire({
+                                    title: "Error",
+                                    text: "An error occurred while processing your request.",
+                                    icon: "error"
+                                });
+                            }
+                        });
+                    }
+                }
+                forms.classList.add('was-validated');
+            }, false);
+        });
+
+
+
+
+        //------------------------------------- For Loading -------------------------------
+        function showLoading() {
+            var loadingIndicatorOverlay = document.createElement('div');
+            loadingIndicatorOverlay.classList.add('loading-indicator-overlay');
+
+            var loadingIndicator = document.createElement('div');
+            loadingIndicator.classList.add('loading-indicator');
+
+            var loadingText = document.createElement('div');
+            loadingText.classList.add('loading-text');
+            loadingText.textContent = 'Please wait...';
+
+            loadingIndicatorOverlay.appendChild(loadingIndicator);
+            loadingIndicatorOverlay.appendChild(loadingText);
+            document.body.appendChild(loadingIndicatorOverlay);
+
+            return true;
+        }
+
+        function hideLoading() {
+            var loadingIndicator = document.querySelector('.loading-indicator-overlay');
+            if (loadingIndicator) {
+                loadingIndicator.remove();
+            }
+        }
+    </script>
+</div>
+</body>
+</html>

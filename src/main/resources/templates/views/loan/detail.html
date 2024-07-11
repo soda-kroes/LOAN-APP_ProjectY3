@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="/layout/_default"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Details</title>
+    <div layout:fragment="style">
+        <link rel="stylesheet" th:href="@{/assets/web/css/register-form.css}"/>
+        <link rel="stylesheet" th:href="@{/assets/web/share/index.css}"/>
+    </div>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="container">
+        <!-- start page title -->
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box">
+                    <div class="page-title-right">
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Loan Management</a></li>
+                            <li class="breadcrumb-item active">Edit</li>
+                        </ol>
+                    </div>
+                    <h4 class="page-title">Edit Loan</h4>
+                </div>
+            </div>
+        </div>
+        <!-- end page title -->
+
+        <form class="need-novalidate-new" id="idFormLoan" novalidate>
+            <div class="card mb-1">
+                <div class="card-header" style="background-color:#f3fcff;">
+                    <b class="text-primary" style="font-size: 16px; font-weight: normal"><img th:src="@{/assets/images/icons/person.png}" style="width: 35px; height: 35px;" />  PERSONAL INFORMATION</b>
+                </div>
+                <div class="card-body">
+                    <div class="row" style="margin-top:10px;">
+                        <div class="col-sm-4">
+                            <label class="form-label" style="font-weight: normal;">
+                                <span class="text-danger">*</span> First Name
+                            </label>
+                            <input class="form-control" id="txtFirstName" placeholder="First Name" th:value="${loanResponseDTO.firstName}" required type="text" readonly/>
+                            <div class="invalid-feedback">The first name field is required.</div>
+                            <div id="firstNameErrorMessage"></div>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="form-label" style="font-weight: normal;"><span class="text-danger">*</span>
+                                Last Name</label>
+                            <input class="form-control" id="txtLastName" placeholder="Last Name" th:value="${loanResponseDTO.lastName}" type="text" required readonly/>
+                            <div class="invalid-feedback">The last name field is required.</div>
+                            <div id="lastNameErrorMessage"></div>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="form-label" style="font-weight: normal;"><span class="text-danger">*</span> Gender</label>
+                            <select class="form-select" id="ddlGender" disabled required>
+                                <option disabled selected value="">--- Choose Gender ---</option>
+                                <option value="Male" th:selected="${loanResponseDTO.gender == 'Male'}">Male</option>
+                                <option value="Female" th:selected="${loanResponseDTO.gender == 'Female'}">Female</option>
+                            </select>
+                            <div class="invalid-feedback">The gender field is required.</div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="form-label"> <span class="text-danger">*</span> Date Of Birth</label>
+                                <div class="input-group date">
+                                    <label class="input-group-text">
+                                        <svg class="bi bi-calendar2-date" fill="currentColor" height="16"
+                                             viewBox="0 0 16 16" width="16"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M6.445 12.688V7.354h-.633A12.6 12.6 0 0 0 4.5 8.16v.695c.375-.257.969-.62 1.258-.777h.012v4.61h.675zm1.188-1.305c.047.64.594 1.406 1.703 1.406 1.258 0 2-1.066 2-2.871 0-1.934-.781-2.668-1.953-2.668-.926 0-1.797.672-1.797 1.809 0 1.16.824 1.77 1.676 1.77.746 0 1.23-.376 1.383-.79h.027c-.004 1.316-.461 2.164-1.305 2.164-.664 0-1.008-.45-1.05-.82h-.684zm2.953-2.317c0 .696-.559 1.18-1.184 1.18-.601 0-1.144-.383-1.144-1.2 0-.823.582-1.21 1.168-1.21.633 0 1.16.398 1.16 1.23z"></path>
+                                            <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM2 2a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H2z"></path>
+                                            <path d="M2.5 4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5V4z"></path>
+                                        </svg>
+                                    </label>
+                                    <input autocomplete="off" disabled class="form-control cpb-form-control" id="txtDateOfBirth"
+                                           th:value="${loanResponseDTO.dateOfBirth}" placeholder="Date Of Birth" type="text" required>
+                                    <div class="invalid-feedback">The date of birth field is required.</div>
+                                    <div id="dateOfBirthErrorMessage"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="form-label" style="font-weight: normal;"><span style="color: red">*</span>
+                                Email </label>
+                            <input class="form-control" id="txtEmail" th:value="${loanResponseDTO.email}" placeholder="Email" type="text" readonly required/>
+                            <div class="invalid-feedback">The email field is required.</div>
+                            <div id="emailErrorMessage"></div>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="form-label" style="font-weight: normal;"><span style="color: red">*</span>
+                                Tell </label>
+                            <input class="form-control" id="txtTell" th:value="${loanResponseDTO.phoneNumber}" placeholder="Tell" type="text" readonly required/>
+                            <div class="invalid-feedback">The tell field is required.</div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-sm-4">
+                            <label class="form-label" style="font-weight: normal;"><span style="color: red">*</span> Address </label>
+                            <select class="form-select" disabled id="ddlAddress">
+
+                            </select>
+                            <div class="invalid-feedback">The address field is required.</div>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="form-label" style="font-weight: normal;"><span style="color: red">*</span> Marital Status</label>
+                            <select class="form-select" id="ddlMaritalStatus" disabled required>
+                                <option disabled selected value="">--- Choose Marital Status ---</option>
+                                <option value="Single" th:selected="${loanResponseDTO.maritalStatus == 'Single'}">Single</option>
+                                <option value="Married" th:selected="${loanResponseDTO.maritalStatus == 'Married'}">Married</option>
+                                <option value="Widower" th:selected="${loanResponseDTO.maritalStatus == 'Widower'}">Widower</option>
+                                <option value="Widow" th:selected="${loanResponseDTO.maritalStatus == 'Widow'}">Widow</option>
+                                <option value="Other" th:selected="${loanResponseDTO.maritalStatus == 'Other'}">Other</option>
+                            </select>
+                            <div class="invalid-feedback">The marital status field is required.</div>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="form-label" style="font-weight: normal;"><span style="color: red">*</span>
+                                Legal ID</label>
+                            <input class="form-control" id="txtNationalityId" placeholder="Legal Id" type="number" th:value="${loanResponseDTO.nationalityId}" readonly />
+                            <div class="invalid-feedback">The legal Id field is required.</div>
+                            <div id="legalIdErrorMessage"></div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-sm text-center">
+                            <div class="form-group">
+                                <label for="legalIdImage"></label>
+                                <label class="form-label">
+                                    <span class="text-danger">*</span> Legal Image
+                                    <img class="img-fluid w-100"
+                                         id="legalIdImageDisplay"
+                                         style="height: 17rem; width: 27rem !important; cursor: pointer"
+                                         th:src="'data:image/jpeg;base64,'+${loanResponseDTO.nationalityImage}"/>
+                                </label>
+                                <input  accept="image/png, image/gif, image/jpeg" id="legalIdImage" name="legalIdImage" type="file" style="display: none"  >
+                                <div class="invalid-feedback">The legal image field is required.</div>
+                            </div>
+                        </div>
+                        <div class="col-sm text-center">
+                            <div class="form-group">
+                                <label for="frontImage"></label>
+                                <label class="form-label">
+                                    <span class="text-danger">*</span> Selfie Image
+                                    <img class="img-fluid w-100" id="imgFrontImageDisplay"
+                                         style="height: 17rem; width: 27rem !important; cursor: pointer"
+                                         th:src="'data:image/jpeg;base64,' + ${loanResponseDTO.selfieImage}" />
+                                </label>
+                                <input accept="image/png, image/gif, image/jpeg"  id="frontImage" name="frontImage" style="display: none" type="file" >
+                                <div class="invalid-feedback">The selfie image field is required.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card mt-0">
+                <div class="card-header" style="background-color:#f3fcff;">
+                    <b class="text-primary" style="font-size: 16px; font-weight: normal"><img th:src="@{/assets/images/icons/identity.png}" style="width: 35px; height: 35px;" />  LOAN INFORMATION</b>
+                </div>
+                <div class="card-body">
+                    <div class="row" style="margin-top:10px;">
+                        <div class="col-sm-4">
+                            <label class="form-label" style="font-weight: normal;"><span style="color: red">*</span>
+                                Currency</label>
+                            <select class="form-select" id="ddlCurrency" disabled required>
+                                <option disabled selected value="">--- Choose Currency ---</option>
+                                <option value="KHR" th:selected="${loanResponseDTO.currency == 'KHR'}" >KHR</option>
+                                <option value="USD" th:selected="${loanResponseDTO.currency == 'USD'}">USD</option>
+                            </select>
+                            <div class="invalid-feedback">The currency field is required.</div>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="form-label" style="font-weight: normal;"><span style="color: red">*</span>
+                                Loan Amount</label>
+                            <input class="form-control" id="txtAmount" th:value="${loanResponseDTO.loanAmount}" readonly placeholder="Loan Amount" type="text" required/>
+                            <div class="invalid-feedback">The amount field is required.</div>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="form-label" style="font-weight: normal;"><span style="color: red">*</span>
+                                Loan Term </label>
+                            <input class="form-control" id="txtLoanTerm" th:value="${loanResponseDTO.loanTerm}"   placeholder="Loan Term" type="text" readonly required/>
+                            <div class="invalid-feedback">The loan term field is required.</div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top:10px;">
+                        <div class="col-sm-4">
+                            <label class="form-label" style="font-weight: normal;"><span style="color: red">*</span>
+                                Loan Type</label>
+                            <select class="form-select" id="ddlLoanType" disabled required>
+                            </select>
+                            <div class="invalid-feedback">The loan type field is required.</div>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="form-label" style="font-weight: normal;"><span style="color: red">*</span>
+                                Interest Rate</label>
+                            <input class="form-control" id="txtInterestRate" th:value="${loanResponseDTO.interestRate}"  placeholder="Interest Rate" type="text" readonly/>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="form-label" style="font-weight: normal;"><span style="color: red">*</span>
+                                Branch</label>
+                            <select class="form-select" id="ddlBranch" disabled required>
+                            </select>
+                            <div class="invalid-feedback">The branch field is required.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div layout:fragment="script">
+    <script th:src="@{/assets/web/js/edit-form.js}"></script>
+    <script th:src="@{/assets/web/js/custom-validation.js}"></script>
+    <script th:inline="javascript">
+
+        var defaultAddress = [[${loanResponseDTO.address}]];
+        // alert(defaultAddress)
+        function getAddress() {
+            $.ajax({
+                type: "GET",
+                url: "api/v1/master-data/getBranch",
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (response) {
+                    console.log(response);
+                    if (response.data.length > 0) {
+                        var ddlAddress = $('#ddlAddress');
+                        ddlAddress.empty();
+
+                        var defaultOption = new Option('--- Choose Address ---', '');
+                        defaultOption.disabled = true;
+                        defaultOption.selected = true;
+                        ddlAddress.append(defaultOption);
+
+                        for (var i = 0; i < response.data.length; i++) {
+                            var Branch = response.data[i];
+                            var branchValue = Branch.name;
+                            var branchText = Branch.name;
+                            var option = new Option(branchText, branchValue);
+                            ddlAddress.append(option);
+                        }
+
+                        if (defaultAddress) {
+                            ddlAddress.val(defaultAddress);
+                        }
+                    }
+                }
+            });
+        }
+        getAddress();
+
+
+        var defaultLoanType = [[${loanResponseDTO.loanTypeValue}]];
+        // alert(defaultLoanType)
+        function getLoanType() {
+            $.ajax({
+                type: "GET",
+                url: "api/v1/master-data/getLoanType",
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (response) {
+                    // console.log(response);
+                    if (response.data.length > 0) {
+                        var ddlLoanType = $('#ddlLoanType');
+                        ddlLoanType.empty();
+
+                        var defaultOption = new Option('--- Choose Loan Type ---', '');
+                        defaultOption.disabled = true; // Disable the option
+                        defaultOption.selected = true; // Select the option
+                        ddlLoanType.append(defaultOption);
+
+                        for (var i = 0; i < response.data.length; i++) {
+                            var LoanType = response.data[i];
+                            var loanTypeValue = LoanType.id;
+                            var loanTypeText = LoanType.name;
+                            var option = new Option(loanTypeText, loanTypeValue);
+                            ddlLoanType.append(option); // Append the option to the select element
+                        }
+                        if (defaultLoanType) {
+                            ddlLoanType.val(defaultLoanType);
+                        }
+                    }
+                }
+            });
+        }
+        getLoanType();
+
+
+        var defaultBranch = [[${loanResponseDTO.branchCode}]];
+        function getBranch() {
+            $.ajax({
+                type: "GET",
+                url: "api/v1/master-data/getBranch",
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (response) {
+                    console.log(response);
+                    if (response.data.length > 0) {
+                        var ddlBranch = $('#ddlBranch');
+                        ddlBranch.empty();
+
+                        var defaultOption = new Option('--- Choose Branch ---', '');
+                        defaultOption.disabled = true; // Disable the option
+                        defaultOption.selected = true; // Select the option
+                        ddlBranch.append(defaultOption);
+
+                        for (var i = 0; i < response.data.length; i++) {
+                            var Branch = response.data[i];
+                            var branchValue = Branch.code;
+                            var branchText = Branch.name;
+                            var option = new Option(branchText, branchValue);
+                            ddlBranch.append(option); // Append the option to the select element
+                        }
+                        if (defaultBranch) {
+                            ddlBranch.val(defaultBranch);
+                        }
+                    }
+                }
+            });
+        }
+        getBranch();
+
+        var selfieImageValue = [[${loanResponseDTO.selfieImage}]];
+        var nationalityImage = [[${loanResponseDTO.nationalityImage}]];
+
+
+        $('#legalIdImage').on('change', function (evt) {
+            const reader = new FileReader();
+            reader.onload = function () {
+                $('#legalIdImageDisplay').attr('src', event.target.result);
+                alert(event.target.result);
+                console.log(event.target.result);
+                const base64String = event.target.result.split(',')[1];
+                nationalityImage = base64String;
+            };
+            reader.readAsDataURL(evt.target.files[0]);
+        });
+
+        $('#frontImage').on('change', function (evt) {
+            const reader = new FileReader();
+            reader.onload = function () {
+                $('#imgFrontImageDisplay').attr('src', reader.result)
+                const base64String = event.target.result.split(',')[1];
+                selfieImageValue = base64String;
+            };
+            reader.readAsDataURL(evt.target.files[0]);
+        });
+
+
+    </script>
+</div>
+</body>
+</html>

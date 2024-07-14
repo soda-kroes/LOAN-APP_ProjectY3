@@ -95,7 +95,7 @@ public class UserController {
 
     @RequestMapping(value = "/resetPassword", method = RequestMethod.POST, produces = "application/json")
     public ResponseEntity<String> retSetPassword(@RequestParam(name = "userId") Long userId,HttpSession session) throws Exception {
-        String password="123Rupp!";
+        String password="123Bank!";
         String url = BaseUrl + "/api/v1/user/reset-pass?id="+userId+"&"+"password="+password;
         String apiToken = (String) session.getAttribute("token");
         String response = HttpClient.getData(url, apiToken,"POST");

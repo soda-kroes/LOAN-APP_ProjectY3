@@ -125,8 +125,6 @@
         }
         getLoanType();
 
-
-
         //GET DATA
         $('#idReportView').DataTable({
             data: DataReports,
@@ -169,13 +167,11 @@
                         return date.toLocaleDateString(undefined, options);
                     }
                 }
-
             ]
         });
 
         var table = $('#idReportView').DataTable();
         var DataReports = [];
-
             function getData(fdate = '', tdate = '', ddlLoanTypeValue = '') {
                 var requestData = {};
 
@@ -188,7 +184,6 @@
                 if (ddlLoanTypeValue) {
                     requestData.loanTypeId = ddlLoanTypeValue;
                 }
-
 
                 $.ajax({
                     url: '/api/v1/loan/report',
@@ -203,110 +198,108 @@
                             table.clear();
                             table.rows.add(DataReports);
                             table.draw();
-                            $("#btnExportExcel").click(function () {
-                                exportToExcel(response.data);
-                            });
-
-                            //Get Data To Excel
-                            function exportToExcel(response) {
-                                // Create a new Excel workbook
-                                var workbook = new ExcelJS.Workbook();
-                                var worksheet = workbook.addWorksheet("LOAN-Report");
-
-                                // Add column headers to the worksheet
-                                var headers = [
-                                    "№",
-                                    "FIRST NAME",
-                                    "LAST NAME",
-                                    "GENDER",
-                                    "MARITAL STATUS",
-                                    "DATE OF BIRTH",
-                                    "LEGAL ID",
-                                    "ADDRESS",
-                                    "PHONE",
-                                    "EMAIL",
-                                    "CURRENCY",
-                                    "LOAN AMOUNT",
-                                    "LOAN TYPE",
-                                    "LOAN TERM",
-                                    "MONTHLY PAYMENT",
-                                    "BRANCH CODE",
-                                    "CREATED DATE"
-                                ];
-                                worksheet.addRow(headers);
-
-                                // Set header styles
-                                var headerRow = worksheet.getRow(1);
-                                headerRow.eachCell(function (cell) {
-                                    cell.fill = {
-                                        type: "pattern",
-                                        pattern: "solid",
-                                        fgColor: { argb: "e8f6fe" }
-                                    };
-                                    cell.font = {
-                                        bold: true
-                                    };
-                                });
-
-
-                                // Add data rows to the worksheet
-                                $.each(response, function (index, item) {
-                                    var rowData = [
-                                        index + 1,
-                                        item.firstName,
-                                        item.lastName,
-                                        item.gender,
-                                        item.maritalStatus,
-                                        item.dateOfBirth,
-                                        item.nationalityId,
-                                        item.address,
-                                        item.phoneNumber,
-                                        item.email,
-                                        item.currency,
-                                        item.loanAmount,
-                                        item.loanType,
-                                        item.loanTerm,
-                                        item.monthlyPayment,
-                                        item.branch,
-                                        item.createdDate
-                                    ];
-                                    worksheet.addRow(rowData);
-                                });
-
-                                //set autofit
-                                worksheet.columns.forEach(function (column) {
-                                    var maxLength = 0;
-                                    column.eachCell({ includeEmpty: true }, function (cell) {
-                                        var columnLength = cell.value ? cell.value.toString().length : 10;
-                                        if (columnLength > maxLength) {
-                                            maxLength = columnLength;
-                                        }
-                                    });
-                                    column.width = maxLength + 2;
-                                });
-
-                                // Set content alignment to center
-                                worksheet.eachRow(function (row, rowNumber) {
-                                    row.eachCell(function (cell) {
-                                        cell.alignment = { horizontal: 'center' };
-                                    });
-                                });
-
-                                // Generate a download link for the Excel file
-                                workbook.xlsx.writeBuffer().then(function (buffer) {
-                                    var blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
-                                    var url = URL.createObjectURL(blob);
-                                    var link = document.createElement("a");
-                                    link.href = url;
-                                    link.download = "Loan-Report.xlsx";
-                                    link.click();
-                                });
-                            }
                         }
                     }
                 });
             }
+        //Get Data To Excel
+        function exportToExcel(response) {
+            // Create a new Excel workbook
+            var workbook = new ExcelJS.Workbook();
+            var worksheet = workbook.addWorksheet("LOAN-Report");
 
+            // Add column headers to the worksheet
+            var headers = [
+                "№",
+                "FIRST NAME",
+                "LAST NAME",
+                "GENDER",
+                "MARITAL STATUS",
+                "DATE OF BIRTH",
+                "LEGAL ID",
+                "ADDRESS",
+                "PHONE",
+                "EMAIL",
+                "CURRENCY",
+                "LOAN AMOUNT",
+                "LOAN TYPE",
+                "LOAN TERM",
+                "MONTHLY PAYMENT",
+                "BRANCH CODE",
+                "CREATED DATE"
+            ];
+            worksheet.addRow(headers);
+
+            // Set header styles
+            var headerRow = worksheet.getRow(1);
+            headerRow.eachCell(function (cell) {
+                cell.fill = {
+                    type: "pattern",
+                    pattern: "solid",
+                    fgColor: { argb: "e8f6fe" }
+                };
+                cell.font = {
+                    bold: true
+                };
+            });
+
+            // Add data rows to the worksheet
+            $.each(response, function (index, item) {
+                var rowData = [
+                    index + 1,
+                    item.firstName,
+                    item.lastName,
+                    item.gender,
+                    item.maritalStatus,
+                    item.dateOfBirth,
+                    item.nationalityId,
+                    item.address,
+                    item.phoneNumber,
+                    item.email,
+                    item.currency,
+                    item.loanAmount,
+                    item.loanType,
+                    item.loanTerm,
+                    item.monthlyPayment,
+                    item.branch,
+                    item.createdDate
+                ];
+                worksheet.addRow(rowData);
+            });
+
+            //set autofit
+            worksheet.columns.forEach(function (column) {
+                var maxLength = 0;
+                column.eachCell({ includeEmpty: true }, function (cell) {
+                    var columnLength = cell.value ? cell.value.toString().length : 10;
+                    if (columnLength > maxLength) {
+                        maxLength = columnLength;
+                    }
+                });
+                column.width = maxLength + 2;
+            });
+
+            // Set content alignment to center
+            worksheet.eachRow(function (row, rowNumber) {
+                row.eachCell(function (cell) {
+                    cell.alignment = { horizontal: 'center' };
+                });
+            });
+
+            // Generate a download link for the Excel file
+            workbook.xlsx.writeBuffer().then(function (buffer) {
+                var blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+                var url = URL.createObjectURL(blob);
+                var link = document.createElement("a");
+                link.href = url;
+                link.download = "Loan-Report.xlsx";
+                link.click();
+            });
+        }
+        // Bind the export event outside the AJAX success function
+        $("#btnExportExcel").click(function () {
+            exportToExcel(DataReports);
+        });
 
         //get value typeOfBook
         var ddlLoanTypeValue;
